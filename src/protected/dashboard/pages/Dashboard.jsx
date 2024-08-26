@@ -6,9 +6,11 @@ import { FaVirusCovid, FaViruses } from 'react-icons/fa6';
 import { MdOutlineBloodtype, MdOutlinePolymer } from 'react-icons/md';
 import { TbVirus } from 'react-icons/tb';
 import { PiBaby } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 
+    const navigate = useNavigate();
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -22,7 +24,10 @@ const Dashboard = () => {
                 <PageTitle icon={icon} />
             </div>
             <div className='w-full py-4 flex justify-between flex-wrap'>
-                <div className='w-full md:w-[48.5%] lg:w-[32%] flex space-x-2 items-center shadow-xl mb-5 p-4 bg-white text-[#005072] cursor-pointer hover:bg-gray-100'>
+                <div 
+                    className='w-full md:w-[48.5%] lg:w-[32%] flex space-x-2 items-center shadow-xl mb-5 p-4 bg-white text-[#005072] cursor-pointer hover:bg-gray-100'
+                    onClick={() => navigate('/ahd')}
+                >
                     <RiVirusLine size={25} />
                     <div className='text-xl font-extralight'>AHD</div>
                 </div>
