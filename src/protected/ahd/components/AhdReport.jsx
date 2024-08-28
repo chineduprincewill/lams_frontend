@@ -7,6 +7,8 @@ import NotificationLoader from '../../../common/NotificationLoader';
 import RecordsTable from '../../../common/RecordsTable';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { PiCheckCircle } from 'react-icons/pi';
+import { MdOutlinePending } from 'react-icons/md';
+import { HiOutlineViewList } from 'react-icons/hi';
 
 const AhdReport = () => {
 
@@ -15,6 +17,7 @@ const AhdReport = () => {
     const [ahd, setAhd] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
+    const [selected, setSelected] = useState('pending');
 
     const columns = [
         {
@@ -53,18 +56,6 @@ const AhdReport = () => {
             )
         },
         {
-            name: "Report",
-            selector: (row) => row?.ReportStatus,
-            filterable: true,
-            sortable: true,
-            cell: (row) => (
-                <div className='grid py-1 space-y-1'>
-                    <div>{row?.ReportStatus}</div>
-                    <div className='text-xs text-gray-500'>{row?.ReportDate && formatDate(row?.ReportDate)}</div>
-                </div>
-            )
-        },
-        {
             name: "Patient",
             selector: (row) => row?.PATIENTID,
             filterable: true,
@@ -78,14 +69,15 @@ const AhdReport = () => {
             )
         },
         {
-            name: "CD4 Test",
+            name: "Test for ART",
             selector: (row) => row?.form_report_id,
             filterable: true,
             sortable: true,
             cell: (row) => (
                 <div className='grid py-1 space-y-1'>
-                    <div className='font-bold'>{row?.CD4Result}</div>
-                    <div className='text-xs text-gray-500'>{formatDateAndTime(row?.TestDate)}</div>
+                    <div><span className='font-bold'>CD4</span> : {row?.CD4Result}</div>
+                    <div><span className='font-bold'>WHO Staging</span> : {row?.WHOStaging}</div>
+                    <div className='text-xs text-gray-500 pb-1 border-t border-gray-100'>{formatDate(row?.TestDate)}</div>
                 </div>
             )
         },
@@ -121,6 +113,7 @@ const AhdReport = () => {
             sortable: true,
             cell: (row) => (
                 <div className='grid py-1 space-y-1'>
+                    <div>{row?.CSFCollected === 'Yes' && 'Collected'}</div>
                     <div className='font-bold'>{row?.CSFResult}</div>
                     <div className='text-xs text-gray-500'>{row?.DateCSFCollected && formatDate(row?.DateCSFCollected)}</div>
                 </div>
@@ -130,6 +123,10 @@ const AhdReport = () => {
 
     if(tokenExpired(ahd)){
         logout();
+    }
+
+    const filterByStatus = (stat) => {
+        setSelected(stat);
     }
 
     if(error !== null){
@@ -143,7 +140,39 @@ const AhdReport = () => {
 
     return (
         <div className='w-full'>
-            <div className='text-xl font-extralight pb-2 border-b border-gray-200'>Report</div>
+            <div className='w-full flex justify-between'>   
+                <div className='text-xl font-extralight pb-2'>Report</div>
+                <div className='flex space-x-4 items-center'>
+                    <div 
+                        className={`flex items-center space-x-0.5 text-orange-500 cursor-pointer py-1 text-sm font-extralight  ${selected === 'pending' && 'border-b border-orange-500'}`}
+                        onClick={() => filterByStatus('pending')}
+                    >
+                        <MdOutlinePending size={13} className='mt-0.5' />
+                        <span>Pending</span>
+                    </div>
+                    <div 
+                        className={`flex items-center space-x-0.5 text-green-600 cursor-pointer py-1 text-sm font-extralight ${selected === 'approved' && 'border-b border-green-600'}`}
+                        onClick={() => filterByStatus('approved')}
+                    >
+                        <PiCheckCircle size={13} className='mt-0.5' />
+                        <span>Approved</span>
+                    </div>
+                    <div 
+                        className={`flex items-center space-x-0.5 text-red-600 cursor-pointer py-1 text-sm font-extralight ${selected === 'rejected' && 'border-b border-red-600'}`}
+                        onClick={() => filterByStatus('rejected')}
+                    >
+                        <AiOutlineCloseCircle size={13} className='mt-0.5' />
+                        <span>Rejected</span>
+                    </div>
+                    <div 
+                        className={`flex items-center space-x-0.5 text-blue-600 cursor-pointer py-1 text-sm font-extralight ${selected === 'all' && 'border-b border-blue-600'}`}
+                        onClick={() => filterByStatus('all')}
+                    >
+                        <HiOutlineViewList size={13} className='mt-0.5' />
+                        <span>All</span>
+                    </div>
+                </div>
+            </div>
             <ToastContainer />
             <div>
             {
