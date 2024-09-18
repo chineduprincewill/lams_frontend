@@ -1,11 +1,11 @@
 import axios from "./baseUrl";
 
-export const fetchAhdReport = async ( token, setAhd, setError, setFetching ) => {
+export const fetchAhdReport = async ( token, endpoint, setAhd, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get('ahd-report',
+        const response  = await axios.get(`${endpoint}`,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
@@ -26,19 +26,20 @@ export const fetchAhdReport = async ( token, setAhd, setError, setFetching ) => 
     setFetching(false);
 }
 
-export const allPlatforms = async ( token, setPlatforms, setError, setFetching ) => {
+export const fetchCd4Statistics = async ( token, endpoint, data, setResults, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get('platforms',
+        const response  = await axios.post(`${endpoint}`,
+            data,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
         );    
 
-        console.log(response.data);
-        setPlatforms(response.data);
+        console.log(response.data?.results);
+        setResults(response.data?.results);
     }
     catch (err) {
         if (!err?.response) {
@@ -52,110 +53,4 @@ export const allPlatforms = async ( token, setPlatforms, setError, setFetching )
     setFetching(false);
 }
 
-export const createPlatform = async ( token, data, setSuccess, setError, setCreating ) => {
 
-    setCreating(true);
-
-    try{
-        const response  = await axios.post('platform',
-            data,
-            {
-                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
-            }
-        );    
-
-        console.log(response.data);
-        setSuccess(response.data);
-    }
-    catch (err) {
-        if (!err?.response) {
-            setError('No Response from Server');
-        } else {
-            console.log(err.response.data);
-            setError(err.response.data);
-        }
-    }
-
-    setCreating(false);
-}
-
-export const updatePlatform = async ( token, data, setSuccess, setError, setUpdating ) => {
-
-    setUpdating(true);
-
-    try{
-        const response  = await axios.post('update-platform',
-            data,
-            {
-                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
-            }
-        );    
-
-        console.log(response.data);
-        setSuccess(response.data);
-    }
-    catch (err) {
-        if (!err?.response) {
-            setError('No Response from Server');
-        } else {
-            console.log(err.response.data);
-            setError(err.response.data);
-        }
-    }
-
-    setUpdating(false);
-}
-
-export const deletePlatform = async ( token, data, setSuccess, setError, setDeleting ) => {
-
-    setDeleting(true);
-
-    try{
-        const response  = await axios.post('delete-platform',
-            data,
-            {
-                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
-            }
-        );    
-
-        console.log(response.data);
-        setSuccess(response.data);
-    }
-    catch (err) {
-        if (!err?.response) {
-            setError('No Response from Server');
-        } else {
-            console.log(err.response.data);
-            setError(err.response.data);
-        }
-    }
-
-    setDeleting(false);
-}
-
-export const updatePOCs = async ( token, data, setSuccess, setError, setUpdating ) => {
-
-    setUpdating(true);
-
-    try{
-        const response  = await axios.post('update-pocs',
-            data,
-            {
-                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
-            }
-        );    
-
-        console.log(response.data);
-        setSuccess(response.data);
-    }
-    catch (err) {
-        if (!err?.response) {
-            setError('No Response from Server');
-        } else {
-            console.log(err.response.data);
-            setError(err.response.data);
-        }
-    }
-
-    setUpdating(false);
-}

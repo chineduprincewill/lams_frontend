@@ -12,12 +12,13 @@ import { HiOutlineViewList } from 'react-icons/hi';
 
 const AhdReport = () => {
 
-    const { token, logout } = useContext(AuthContext);
+    const { token, user, logout } = useContext(AuthContext);
 
     const [ahd, setAhd] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState('pending');
+    const [endpoint, setEndpoint] = useState('ahd-report');
 
     const columns = [
         {
@@ -127,6 +128,10 @@ const AhdReport = () => {
 
     const filterByStatus = (stat) => {
         setSelected(stat);
+        stat === 'pending' && setEndpoint('ahd-report');
+        stat === 'approved' && setEndpoint('apporved-ahd-report');
+        stat === 'rejected' && setEndpoint('rejected-ahd-report');
+        stat === 'all' && setEndpoint('all-ahd-report');
     }
 
     if(error !== null){
@@ -135,13 +140,13 @@ const AhdReport = () => {
     }
 
     useEffect(() => {
-        fetchAhdReport(token, setAhd, setError, setFetching);
-    }, [])
+        fetchAhdReport(token, endpoint, setAhd, setError, setFetching);
+    }, [endpoint])
 
     return (
         <div className='w-full'>
             <div className='w-full flex justify-between'>   
-                <div className='text-xl font-extralight pb-2'>Report</div>
+                <div className='text-xl font-extralight pb-2'><span className='capitalize'>{selected}</span> Reports</div>
                 <div className='flex space-x-4 items-center'>
                     <div 
                         className={`flex items-center space-x-0.5 text-orange-500 cursor-pointer py-1 text-sm font-extralight  ${selected === 'pending' && 'border-b border-orange-500'}`}
@@ -164,13 +169,16 @@ const AhdReport = () => {
                         <AiOutlineCloseCircle size={13} className='mt-0.5' />
                         <span>Rejected</span>
                     </div>
-                    <div 
-                        className={`flex items-center space-x-0.5 text-blue-600 cursor-pointer py-1 text-sm font-extralight ${selected === 'all' && 'border-b border-blue-600'}`}
-                        onClick={() => filterByStatus('all')}
-                    >
-                        <HiOutlineViewList size={13} className='mt-0.5' />
-                        <span>All</span>
-                    </div>
+                {
+                    (user && user?.usercategory === 'Admin') &&  
+                        <div 
+                            className={`flex items-center space-x-0.5 text-blue-600 cursor-pointer py-1 text-sm font-extralight ${selected === 'all' && 'border-b border-blue-600'}`}
+                            onClick={() => filterByStatus('all')}
+                        >
+                            <HiOutlineViewList size={13} className='mt-0.5' />
+                            <span>All</span>
+                        </div>
+                }
                 </div>
             </div>
             <ToastContainer />
