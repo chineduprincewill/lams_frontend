@@ -1,19 +1,18 @@
 import axios from "./baseUrl";
 
-export const fetchTicketMessages = async ( data, setMessages, setError, setFetching ) => {
+export const fetchFacilities = async ( token, setFacilities, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.post('messages',
-            data,
+        const response  = await axios.get('facilities',
             {
-                headers: { 'Accept' : 'application/json' }
+                headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
         );    
 
-        console.log(response.data);
-        setMessages(response.data);
+        console.log(response.data?.facilities);
+        setFacilities(response.data?.facilities);
     }
     catch (err) {
         if (!err?.response) {

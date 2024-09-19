@@ -1,10 +1,5 @@
 import React, { useRef, useState } from 'react'
-import FloatingNavbar from '../components/FloatingNavbar'
-import PublicPlatforms from '../components/PublicPlatforms'
-import MainComponent from '../components/MainComponent'
-import TicketForm from '../components/TicketForm'
 import Signup from '../components/Signup'
-import ChatsComponent from '../components/ChatsComponent'
 
 const Landing = () => {
 

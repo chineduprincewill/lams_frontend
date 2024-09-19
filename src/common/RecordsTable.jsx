@@ -16,7 +16,7 @@ const RecordsTable = ({ columns, data }) => {
 
     return (
         <div>
-            <div className='overflow-auto w-[100%] mt-0 mb-12 bg-white py-4 rounded-md'>
+            <div className='overflow-auto w-[100%] mt-0 bg-white rounded-md'>
                 <div className='hidden'>
                     <FilterComponent data={data} setFilteredData={setFilteredData} />
                 </div>

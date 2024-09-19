@@ -4,10 +4,10 @@ import { formatDate, formatDateAndTime } from '../../../apis/functions'
 import { BsChatDots } from 'react-icons/bs'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import MessageForm from './MessageForm'
-import { fetchTicketMessages } from '../../../apis/messageActions'
+//import { fetchTicketMessages } from '../../../apis/messageActions'
 import { AuthContext } from '../../../context/AuthContext'
 import { ToastContainer, toast } from 'react-toastify'
-import MessagesHistory from '../../../protected/tickets/components/MessagesHistory'
+//import MessagesHistory from '../../../protected/tickets/components/MessagesHistory'
 import UnauthMessageHistory from '../../../protected/tickets/components/UnauthMessageHistory'
 
 const ChatsComponent = ({ setSelected, ticketinfo }) => {

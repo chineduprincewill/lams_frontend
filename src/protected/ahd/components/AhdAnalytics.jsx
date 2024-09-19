@@ -38,13 +38,6 @@ const AhdAnalytics = () => {
         setIsSelected(Date.now());
     }
 
-    /**const categoryData = useMemo(() => {
-        const filteredResults = category !== '' ? results.filter(rst => rst?.forms_title === `AHD ${category}`) : results;
-        setResults(filteredResults);
-
-        console.log(filteredResults);
-    }, [category])*/
-
     const filteredLabels = useMemo(() => {
         results !== null && results.map(rslt => {
             labels.push(rslt?.week_start_date.toString()+' to '+rslt?.week_end_date.toString());
@@ -59,8 +52,6 @@ const AhdAnalytics = () => {
         return data;
     }, [results]);
 
-    //console.log(labels);
-    //console.log(data);
     useEffect(() => {
         if(isSelected && category !== ''){
             setResults(results => results.filter(rst => rst?.forms_title === `AHD ${category}`))
@@ -69,14 +60,6 @@ const AhdAnalytics = () => {
             fetchCd4Statistics(token, endpoint, {selectedYear}, setResults, setError, setFetching);
         }
     }, [selectedYear, category, isSelected])
-
-    /**useEffect(() => {
-        let filteredResults = results;
-        if(category !== ''){
-            filteredResults = results.filter(rst => rst?.forms_title === `AHD ${category}`);
-        }
-        setResults(filteredResults);
-    }, [results, category])*/
 
     console.log(results);
 
