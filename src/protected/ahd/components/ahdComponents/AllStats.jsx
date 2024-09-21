@@ -10,7 +10,6 @@ const AllStats = ({ data }) => {
         {
             name: "Period",
             selector: (row) => row?.week_start_date,
-            width: '55%',
             filterable: true,
             sortable: true,
             cell: (row) => (

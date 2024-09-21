@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../../../context/AuthContext'
 import { tokenExpired } from '../../../../apis/functions';
 import { fetchCd4Counts } from '../../../../apis/ahdActions';
-import { HiMinus, HiPlus } from 'react-icons/hi';
+import { HiMinus, HiOutlineDocumentReport, HiPlus } from 'react-icons/hi';
 import { fetchFacilities } from '../../../../apis/utilityActions';
 import { PiCaretDoubleRightThin } from 'react-icons/pi';
 import CD4Data from '../cd4Components/CD4Data';
@@ -164,13 +164,13 @@ const CD4Stats = () => {
                             className={`p-2 rounded-full shadow-xl ${active === 'report' ? 'bg-[#005072] hover:bg-[#0b303f] text-white' : 'bg-[#a6ce39] hover:bg-[#91b52e]'}   border border-gray-200`}
                             onClick={() => setActive('report')}
                         >
-                            <ImStatsBars size={15} />
+                            <HiOutlineDocumentReport size={20} title='Reports' />
                         </div>
                         <div 
                             className={`p-2 rounded-full shadow-xl ${active === 'chart' ? 'bg-[#005072] hover:bg-[#0b303f] text-white' : 'bg-[#a6ce39] hover:bg-[#91b52e]'}   border border-gray-200`}
                             onClick={() => setActive('chart')}
                         >
-                            <IoAnalyticsOutline size={15} />
+                            <IoAnalyticsOutline size={20} title='Charts' />
                         </div>
                     </div>
                     <span className='px-6 py-1 font-extralight bg-[#005072] text-white'>

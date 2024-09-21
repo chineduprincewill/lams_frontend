@@ -59,7 +59,7 @@ const AhdStats = () => {
             {
                 fetching ? <SectionLoader /> :
                     <div className='w-full md:flex md:flex-wrap md:justify-between'>
-                        <div className='w-full md:w-[49%] mb-6'>
+                        <div className='w-full mb-6'>
                             <AllStats data={results} />
                         </div>
                         <div className='w-full md:w-[49%] mb-6'>
