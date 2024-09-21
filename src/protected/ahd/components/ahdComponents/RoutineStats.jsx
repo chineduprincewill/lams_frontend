@@ -42,7 +42,7 @@ const RoutineStats = ({ data }) => {
                 className='w-full flex items-center justify-between border-b border-gray-100 pb-2 text-gray-700 font-extralight text-lg hover:bg-gray-50 cursor-pointer'
                 onClick={() => toggleShow()}
             >
-                <span>Patients on ART Treatment (Routine)</span>
+                <span>Weekly No. of Patients on ART Treatment (Routine)</span>
             {
                 show ? <HiMinus size={20} />
                 :   <HiPlus size={20} />

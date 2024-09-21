@@ -5,6 +5,10 @@ import { fetchCd4Counts } from '../../../../apis/ahdActions';
 import { HiMinus, HiPlus } from 'react-icons/hi';
 import { fetchFacilities } from '../../../../apis/utilityActions';
 import { PiCaretDoubleRightThin } from 'react-icons/pi';
+import CD4Data from '../cd4Components/CD4Data';
+import { ImStatsBars } from 'react-icons/im';
+import { IoAnalyticsOutline } from 'react-icons/io5';
+import CD4Charts from '../cd4Components/CD4Charts';
 
 const CD4Stats = () => {
 
@@ -22,6 +26,9 @@ const CD4Stats = () => {
     const endpoint = 'cd4-count';
     const [cd4data, setCd4data] = useState();
     const [totalCount, setTotalCount] = useState(0);
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+    const [active, setActive] = useState('report');
 
     const [show, setShow] = useState(false);
 
@@ -40,17 +47,29 @@ const CD4Stats = () => {
         if(facilities !== null && facilities.length > 0){
             facilities.map(fac => {
                 let fcCount = results !== null && results.filter(res => 
-                    res.facility === fac.facility //&&
-                    //section !== '' && res.Section === section &&
-                    //cd4status !== '' && res.LowCD4Count === cd4status
+                    res.facility === fac.facility
                 );
 
+                // filter by date ranger
+                if(dateFrom !== '' && dateTo !== ''){
+                    const from  = new Date(dateFrom);
+                    const to = new Date(dateTo);
+
+                    fcCount = fcCount.filter(fc => {
+                        const testDate = new Date(fc.TestDate);
+                        return testDate >= from && testDate <= to
+                    })
+                }
+
+                // filter by both section and cd4 status
                 if(section !== '' && cd4status !== ''){
                     fcCount = fcCount.filter(fc => ((fc.Section === section) && (fc.LowCD4Count === cd4status)))
                 }
+                // filter by section
                 else if(section !== ''){
                     fcCount = fcCount.filter(fc => fc.Section === section)
                 }
+                // filter by cd4 status
                 else if(cd4status !== ''){
                     fcCount = fcCount.filter(fc => fc.LowCD4Count === cd4status)
                 }
@@ -86,7 +105,7 @@ const CD4Stats = () => {
                 onClick={() => toggleShow()}
              >
                 <div className='flex items-center space-x-4'>
-                    <span>CD4 Statistics</span>
+                    <span>CD4 Statistics for {user && user?.lga} LGA</span>
                 {
                     section !== '' && 
                         <Fragment><PiCaretDoubleRightThin size={20} className='text-gray-400 mt-0.5' /><span>{section}</span></Fragment>
@@ -118,22 +137,53 @@ const CD4Stats = () => {
                         <option value='1'>Low CD4 Count</option>
                         <option value='0'>High CD4 Count</option>
                     </select>
+                    <div className='w-full md:w-[20%] flex items-center space-x-2'>
+                        <div>From</div>
+                        <input 
+                            type='date' 
+                            value={dateFrom}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            className={`peer block w-full px-1 py-0.5 bg-white border border-gray-300 focus:outline-none focus:border-blue-500 ${!dateFrom ? 'text-transparent' : 'text-black'}`} 
+                            placeholder='From'
+                        />
+                    </div>
+                    <div className='w-full md:w-[20%] flex items-center space-x-2'>
+                        <div>To</div>
+                        <input 
+                            type='date' 
+                            value={dateTo}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            className={`peer block w-full px-1 py-0.5 bg-white border border-gray-300 focus:outline-none focus:border-blue-500 ${!dateTo ? 'text-transparent' : 'text-black'}`} 
+                            placeholder='To'
+                        />
+                    </div>
                 </div>
-                <div className='w-full flex justify-end'>
+                <div className='w-full flex justify-between'>
+                    <div className='flex items-center space-x-4'>
+                        <div 
+                            className={`p-2 rounded-full shadow-xl ${active === 'report' ? 'bg-[#005072] hover:bg-[#0b303f] text-white' : 'bg-[#a6ce39] hover:bg-[#91b52e]'}   border border-gray-200`}
+                            onClick={() => setActive('report')}
+                        >
+                            <ImStatsBars size={15} />
+                        </div>
+                        <div 
+                            className={`p-2 rounded-full shadow-xl ${active === 'chart' ? 'bg-[#005072] hover:bg-[#0b303f] text-white' : 'bg-[#a6ce39] hover:bg-[#91b52e]'}   border border-gray-200`}
+                            onClick={() => setActive('chart')}
+                        >
+                            <IoAnalyticsOutline size={15} />
+                        </div>
+                    </div>
                     <span className='px-6 py-1 font-extralight bg-[#005072] text-white'>
                         Total : <span className='font-bold text-2xl'>{totalCount}</span>
                     </span>
                 </div>
-                <div className='w-full p-2'>
                 {
-                    (cd4data && cd4data.length > 0) && cd4data.map(cdata => {
-                        return <div key={cdata?.facility} className='flex justify-between items-center py-2 border-b border-gray-100'>
-                            <div className='md:w-[95%] font-extralight'>{cdata?.facility}</div>
-                            <div className='md:w-[5%]'>{cdata?.count}</div>
-                        </div>
-                    })
+                    active === 'report' ?
+                        <CD4Data cd4data={cd4data} />
+                        :
+                        <CD4Charts cd4data={cd4data} />
                 }
-                </div>
+                
             </div>
         </div>
     )

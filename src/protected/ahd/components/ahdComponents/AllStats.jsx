@@ -10,7 +10,7 @@ const AllStats = ({ data }) => {
         {
             name: "Period",
             selector: (row) => row?.week_start_date,
-            width: '70%',
+            width: '55%',
             filterable: true,
             sortable: true,
             cell: (row) => (
@@ -20,7 +20,18 @@ const AllStats = ({ data }) => {
             )
         },
         {
-            name: "Total Patients",
+            name: "Section",
+            selector: (row) => row?.forms_title,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{row?.forms_title}</div>
+                </div>
+            )
+        },
+        {
+            name: "Patients",
             selector: (row) => row?.patients_in_range,
             filterable: true,
             sortable: true,
@@ -42,7 +53,7 @@ const AllStats = ({ data }) => {
                 className='w-full flex items-center justify-between border-b border-gray-100 pb-2 text-gray-700 font-extralight text-lg hover:bg-gray-50 cursor-pointer'
                 onClick={() => toggleShow()}
              >
-                <span>Patients on ART Treatment (Baseline and Routine)</span>
+                <span>Weekly No. of Patients on ART Treatment (Baseline and Routine)</span>
             {
                 show ? <HiMinus size={20} />
                 :   <HiPlus size={20} />
