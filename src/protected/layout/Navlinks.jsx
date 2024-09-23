@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { AiOutlineDashboard, AiOutlineWindows } from 'react-icons/ai';
+import { AiOutlineDashboard } from 'react-icons/ai';
 import { PiBaby } from 'react-icons/pi';
 import { AuthContext } from '../../context/AuthContext';
 import { RiVirusLine } from 'react-icons/ri';
-import { FaRegUser, FaVirusCovid, FaViruses } from 'react-icons/fa6';
+import { FaVirusCovid, FaViruses } from 'react-icons/fa6';
 import { MdOutlineBloodtype, MdOutlinePolymer } from 'react-icons/md';
 import { TbVirus } from 'react-icons/tb';
+import { FaUsers } from 'react-icons/fa';
 
 const Navlinks = () => {
 
@@ -24,19 +25,19 @@ const Navlinks = () => {
         {
             id: 2,
             title: "SARS-COV2",
-            url: "#",
+            url: "/sars-cov2",
             icon: <FaVirusCovid size={17} />
         },
         {
             id: 3,
             title: "SEROLOGY",
-            url: "#",
+            url: "/serology",
             icon: <MdOutlineBloodtype size={17} />
         },
         {
             id: 4,
             title: "TB-HIV",
-            url: "#",
+            url: "/tb-hiv",
             icon: <TbVirus size={17} />
         },
         {
@@ -48,13 +49,13 @@ const Navlinks = () => {
         {
             id: 6,
             title: "VIRAL LOAD",
-            url: "#",
+            url: "/viral-load",
             icon: <FaViruses size={17} />
         },
         {
             id: 7,
             title: "EID",
-            url: "#",
+            url: "/eid",
             icon: <PiBaby size={17} />
         },
     ]
@@ -84,12 +85,15 @@ const Navlinks = () => {
                 })
             }
             <li className='w-full pt-6'></li>
-            <li className={`${locatn.pathname === '/profile' ? 'font-semibold text-[#005072] border-b-2 border-[#54c5d0]' : 'font-light'} px-3 py-2 hover:ml-2 hover:duration-300 hover:ease-linear`}>
-                <Link to='/profile' className='flex justify-start items-center space-x-3 my-1'>
-                    <FaRegUser size={17} />
-                    <span>User</span>
-                </Link>
-            </li>
+            {
+                (user) && 
+                    <li className={`${locatn.pathname === '/profile' ? 'font-semibold text-[#005072] border-b-2 border-[#54c5d0]' : 'font-light'} px-3 py-2 hover:ml-2 hover:duration-300 hover:ease-linear`}>
+                        <Link to='/users' className='flex justify-start items-center space-x-3 my-1'>
+                            <FaUsers size={17} />
+                            <span>User</span>
+                        </Link>
+                    </li>
+            }
         </ul>
     )
 }

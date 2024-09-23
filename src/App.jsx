@@ -6,6 +6,12 @@ import AuthContextProvider from "./context/AuthContext";
 import PrivateRoute from "./protected/layout/PrivateRoute";
 import DefaultLayout from "./protected/layout/DefaultLayout";
 import Ahd from "./protected/ahd/pages/Ahd";
+import Covid from "./protected/covid/pages/Covid";
+import Serology from "./protected/serology/pages/Serology";
+import TbHiv from "./protected/tb-hiv/pages/TbHiv";
+import ViralLoad from "./protected/viral-load/pages/ViralLoad";
+import Eid from "./protected/eid/pages/Eid";
+import Users from "./protected/users/pages/Users";
 
 function App() {
 
@@ -21,6 +27,12 @@ function App() {
                 <Route element={<PrivateRoute><DefaultLayout /></PrivateRoute>}>
                   <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                   <Route path='/ahd' element={<PrivateRoute><Ahd /></PrivateRoute>} />
+                  <Route path='/sars-cov2' element={<PrivateRoute><Covid /></PrivateRoute>} />
+                  <Route path="/serology" element={<PrivateRoute><Serology /></PrivateRoute>} />
+                  <Route path="/tb-hiv" element={<PrivateRoute><TbHiv /></PrivateRoute>} />
+                  <Route path="/viral-load" element={<PrivateRoute><ViralLoad /></PrivateRoute>} />
+                  <Route path="/eid" element={<PrivateRoute><Eid /></PrivateRoute>} />
+                  <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
                 </Route>
               </Routes>
           </Router>
