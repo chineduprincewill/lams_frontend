@@ -1,10 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdOutlinePending } from 'react-icons/md'
 import { PiCheckCircle } from 'react-icons/pi'
-import { tokenExpired } from '../../../apis/functions'
+import { formatDate, tokenExpired } from '../../../apis/functions'
 import { AuthContext } from '../../../context/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
+import NotificationLoader from '../../../common/NotificationLoader'
+import RecordsTable from '../../../common/RecordsTable'
+import { fetchSerologyReport } from '../../../apis/serologyActions'
 
 const SerologyReport = () => {
 
@@ -15,6 +18,93 @@ const SerologyReport = () => {
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState('pending');
     const [endpoint, setEndpoint] = useState('pending-serology-report');
+
+    const columns = [
+        {
+            name: "Facility",
+            selector: (row) => row?.facility,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-2 space-y-1'>
+                    <div>{row?.facility}, {row?.lga}, {row?.state} State</div>
+                </div>
+            )
+        },
+        {
+            name: "Tested",
+            selector: (row) => row?.Tested,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{row?.Tested}</div>
+                </div>
+            )
+        },
+        {
+            name: "Retested",
+            selector: (row) => row?.Retested,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{row?.Retested}</div>
+                </div>
+            )
+        },
+        {
+            name: "+Ve",
+            selector: (row) => row?.Positive,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{row?.Positive}</div>
+                </div>
+            )
+        },
+        {
+            name: "Confirmed +ve",
+            selector: (row) => row?.ConfirmedPositive,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{row?.ConfirmedPositive}</div>
+                </div>
+            )
+        },
+        {
+            name: "Date",
+            selector: (row) => row?.ReportDate,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-1 space-y-1'>
+                    <div>{formatDate(row?.ReportDate)}</div>
+                </div>
+            )
+        },
+        {
+            name: "",
+            button: true,
+            cell: (row) => (
+                <div className='flex space-x-2 items-center'>
+                <PiCheckCircle 
+                    size={17} 
+                    className='cursor-pointer mt-1 text-green-600'
+                    title='Approve' 
+                />
+                <AiOutlineCloseCircle 
+                    size={16} 
+                    className='cursor-pointer mt-1 text-red-600' 
+                    title='Reject'
+                />
+            </div>
+            ),
+          },
+    ];
 
     if(tokenExpired(serology)){
         logout();
@@ -32,6 +122,10 @@ const SerologyReport = () => {
         toast.error(JSON.stringify(error));
         setError(null);
     }
+
+    useEffect(() => {
+        fetchSerologyReport(token, endpoint, setSerology, setError, setFetching);
+    }, [endpoint])
 
     return (
         <div className='w-full'>
@@ -62,6 +156,12 @@ const SerologyReport = () => {
                 </div>
             </div>
             <ToastContainer />
+            <div>
+            {
+                fetching ? <NotificationLoader /> : 
+                    (serology !== null && serology?.serology.length > 0) && <RecordsTable columns={columns} data={serology?.serology} />
+             }
+            </div>
         </div>
     )
 }

@@ -38,7 +38,10 @@ const Dashboard = () => {
                     <FaVirusCovid size={25} />
                     <div className='text-xl font-extralight'>SARS-COV2</div>
                 </div>
-                <div className='w-full md:w-[48.5%] lg:w-[32%] flex space-x-2 items-center shadow-xl mb-5 p-4 bg-white text-[#005072] cursor-pointer hover:bg-gray-100'>
+                <div 
+                    className='w-full md:w-[48.5%] lg:w-[32%] flex space-x-2 items-center shadow-xl mb-5 p-4 bg-white text-[#005072] cursor-pointer hover:bg-gray-100'
+                    onClick={() => navigate('/serology')}
+                >
                     <MdOutlineBloodtype size={25} />
                     <div className='text-xl font-extralight'>SEROLOGY</div>
                 </div>

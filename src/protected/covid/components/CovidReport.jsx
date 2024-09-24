@@ -32,17 +32,6 @@ const CovidReport = () => {
             )
         },
         {
-            name: "Section",
-            selector: (row) => row?.Section,
-            filterable: true,
-            sortable: true,
-            cell: (row) => (
-                <div className='grid py-1 space-y-1'>
-                    <div>{row?.Section}</div>
-                </div>
-            )
-        },
-        {
             name: "RDT Screened",
             selector: (row) => row?.ScreenedUsingRDT,
             filterable: true,
