@@ -51,7 +51,7 @@ const AhdReport = () => {
             sortable: true,
             cell: (row) => (
                 <div className='grid py-1 space-y-1'>
-                    <div>{row?.Section}</div>
+                    <div>{(row?.Section).replace('CrAg,', '').replace('TB LAM', '')}</div>
                     <div><span className='text-blue-500'>Method</span> - {row?.Method}</div>
                 </div>
             )
