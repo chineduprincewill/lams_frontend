@@ -73,7 +73,7 @@ const TbHivReport = () => {
             )
         },
         {
-            name: "Activities",
+            name: "Actions",
             selector: (row) => row?.SampleTested,
             filterable: true,
             sortable: true,
