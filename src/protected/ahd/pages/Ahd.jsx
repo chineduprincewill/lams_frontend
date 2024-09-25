@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RiVirusLine } from 'react-icons/ri';
 import PageTitle from '../../../common/PageTitle';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
@@ -8,22 +8,29 @@ import { PiCheckCircleFill } from 'react-icons/pi';
 import AhdReport from '../components/AhdReport';
 import AhdAnalytics from '../components/AhdAnalytics';
 import AhdStats from '../components/AhdStats';
+import { AuthContext } from '../../../context/AuthContext';
+import StatesComponent from '../../../common/StatesComponent';
+import { fetchLgas } from '../../../apis/utilityActions';
+import LgasComponent from '../../../common/LgasComponent';
 
 const Ahd = () => {
 
+    const { user } = useContext(AuthContext);
+    const [state, setState] = useState();
+    const [lga, setLga] = useState();
     const [isVisible, setIsVisible] = useState(false);
     const [selected, setSelected] = useState('report');
 
     let selectedComponent;
 
     if(selected === 'report'){
-        selectedComponent = <AhdReport />
+        selectedComponent = <AhdReport lga={lga} />
     }
     if(selected === 'analytics'){
-        selectedComponent = <AhdAnalytics />
+        selectedComponent = <AhdAnalytics lga={lga} />
     }
     if(selected === 'stats'){
-        selectedComponent = <AhdStats />
+        selectedComponent = <AhdStats lga={lga} />
     }
 
     useEffect(() => {
@@ -62,6 +69,15 @@ const Ahd = () => {
                         {selected === 'stats' && <PiCheckCircleFill size={17} className='text-white' />}
                     </div>
                 </div>
+            </div>
+            <div className='w-full flex items-center space-x-6 p-4 bg-white'>
+        {
+            (user && user?.usercategory === 'Admin') &&
+                <StatesComponent setState={setState} />
+        }
+        {
+            state && <LgasComponent state={state} setLga={setLga} />
+        }
             </div>
             <div className='w-full min-h-96 bg-white my-4 shadow-xl p-4'>
             { selectedComponent }

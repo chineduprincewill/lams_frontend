@@ -9,17 +9,25 @@ import { FaPhone, FaRegCircleUser } from 'react-icons/fa6'
 import { PiGenderIntersex } from 'react-icons/pi'
 import SubmittingButton from '../../../../common/SubmittingButton';
 import { updateUser } from '../../../../apis/userActions';
+import RolesComponent from '../../../../common/RolesComponent';
+import StatesComponent from '../../../../common/StatesComponent';
+import LgasComponent from '../../../../common/LgasComponent';
+import FacilitiesComponent from '../../../../common/FacilitiesComponent';
+import SupervisorsComponent from '../../../../common/SupervisorsComponent';
 
 const EditUser = ({ usr, setEditmodal }) => {
 
     const { token, refreshRecord } = useContext(AuthContext);
 
-    const [fullname, setFullname] = useState(usr?.fullname);
-    const [username, setUsername] = useState(usr?.username);
+    const [last_name, setLast_name] = useState(usr?.last_name);
+    const [first_name, setFirst_name] = useState(usr?.first_name);
     const [email, setEmail] = useState(usr?.email);
-    const [mobile, setMobile] = useState(usr?.mobile);
-    const [role, setRole] = useState(usr?.role);
-    const [gender, setGender] = useState(usr?.gender);
+    const [phonenumber, setPhonenumber] = useState(usr?.phonenumber);
+    const [usercategory, setUsercategory] = useState(usr?.usercategory);
+    const [state, setState] = useState(usr?.state);
+    const [lga, setLga] = useState(usr?.lga);
+    const [facility, setFacility] = useState(usr?.facility);
+    const [supervisor, setSupervisor] = useState(usr?.supervisor);
     const [updating, setUpdating] = useState(false);
     const [success, setSuccess] = useState(null);
     const [error, setError] = useState(null);
@@ -34,8 +42,10 @@ const EditUser = ({ usr, setEditmodal }) => {
         e.preventDefault();
 
         const data = {
-            id: usr?.id, fullname, username, email, mobile, role, gender
+            id: usr?.id, last_name, first_name, email, phonenumber, usercategory, state, lga, facility, supervisor
         }
+
+        //alert(JSON.stringify(data))
         updateUser(token, data, setSuccess, setError, setUpdating);
     }
 
@@ -48,15 +58,17 @@ const EditUser = ({ usr, setEditmodal }) => {
         toast.success(success?.success);
         setSuccess(null)
         refreshRecord(Date.now());
-        //setEditmodal(false);
+        setEditmodal(false);
     }
+
+    console.log(supervisor);
 
     return (
         <div>
             <div className='fixed inset-0 z-50 bg-black bg-opacity-75 transition-opacity'></div>
             <div className="fixed inset-0 z-50 overflow-y-auto">
                 <div className="flex mt-16 md:mt-0 md:min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
-                    <div className={`w-full md:w-[450px] bg-white border border-gray-400 dark:text-gray-700 px-6 py-1 transition-transform ${ isVisible ? 'animate-slideIn' : '-translate-y-full'}`}>
+                    <div className={`w-full md:w-[600px] bg-white border border-gray-400 dark:text-gray-700 px-6 py-1 transition-transform ${ isVisible ? 'animate-slideIn' : '-translate-y-full'}`}>
                         <div className='flex justify-between items-center border-b border-gray-200 py-2 text-red-500'>
                             <span className='text-gray-700 uppercase font-bold text-sm'>
                                 Edit User
@@ -76,9 +88,9 @@ const EditUser = ({ usr, setEditmodal }) => {
                                         type='text' 
                                         className='w-full p-2 border border-gray-400'
                                         required
-                                        placeholder='Enter Full name'
-                                        value={fullname}
-                                        onChange={(e) => setFullname(e.target.value)}
+                                        placeholder='Enter last name'
+                                        value={last_name}
+                                        onChange={(e) => setLast_name(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
@@ -91,9 +103,9 @@ const EditUser = ({ usr, setEditmodal }) => {
                                         type='text' 
                                         className='w-full p-2 border border-gray-400'
                                         required
-                                        placeholder='Enter username'
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder='Enter first name'
+                                        value={first_name}
+                                        onChange={(e) => setFirst_name(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
@@ -121,8 +133,8 @@ const EditUser = ({ usr, setEditmodal }) => {
                                         type='number' 
                                         className='w-full p-2 border border-gray-400'
                                         placeholder='Enter mobile number'
-                                        value={mobile}
-                                        onChange={(e) => setMobile(e.target.value)}
+                                        value={phonenumber}
+                                        onChange={(e) => setPhonenumber(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
@@ -130,37 +142,12 @@ const EditUser = ({ usr, setEditmodal }) => {
                                         <FaPhone size={25} />
                                     </button>
                                 </div>
-                                <div className='w-full flex items-center'>
-                                    <select 
-                                        className='w-full p-2 border border-gray-400'
-                                        onChange={(e) => setGender(e.target.value)}
-                                    >
-                                        <option value={gender}>{gender}</option>
-                                        <option>select gender</option>
-                                        <option value='Male'>Male</option>
-                                        <option value='Female'>Female</option>
-                                    </select>
-                                    <button
-                                        className='p-2 bg-[#a6ce39] text-[#005072]'
-                                    >
-                                        <PiGenderIntersex size={25} />
-                                    </button>
-                                </div>
-                                <div className='w-full flex items-center'>
-                                    <select 
-                                        className='w-full p-2 border border-gray-400'
-                                        onChange={(e) => setRole(e.target.value)}
-                                    >
-                                        <option value={role}>{role}</option>
-                                        <option>select role</option>
-                                        <option value='admin'>admin</option>
-                                        <option value='staff'>staff</option>
-                                    </select>
-                                    <button
-                                        className='p-2 bg-[#a6ce39] text-[#005072]'
-                                    >
-                                        <FaRegCircleUser size={25} />
-                                    </button>
+                                <div className='grid space-y-4'>
+                                    <RolesComponent setUsercategory={setUsercategory} yPad='py-2.5' val={usercategory} />
+                                    <StatesComponent setState={setState} yPad='py-2.5' val={state} />
+                                    <LgasComponent state={state} setLga={setLga} yPad='py-2.5' val={lga} />
+                                    <FacilitiesComponent lga={lga} setFacility={setFacility} yPad='py-2.5' val={facility} />
+                                    <SupervisorsComponent setSupervisor={setSupervisor} yPad='py-2.5' val={supervisor} />
                                 </div>
                             {
                                 updating ?

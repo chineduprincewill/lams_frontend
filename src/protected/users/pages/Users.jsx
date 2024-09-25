@@ -3,7 +3,7 @@ import PageTitle from '../../../common/PageTitle';
 import { FiUsers } from 'react-icons/fi';
 import { HiPlus, HiTrash } from 'react-icons/hi';
 import { AuthContext } from '../../../context/AuthContext';
-import { tokenExpired } from '../../../apis/functions';
+import { formatDate, tokenExpired } from '../../../apis/functions';
 import { deleteUser, fetchUsers } from '../../../apis/userActions';
 import { AiOutlineEdit } from 'react-icons/ai';
 import NotificationLoader from '../../../common/NotificationLoader';
@@ -27,26 +27,61 @@ const Users = () => {
 
     const columns = [
         {
-            name: "",
-            selector: (row) => row?.fullname,
+            name: "Account",
+            selector: (row) => row?.email,
             filterable: true,
             sortable: true,
             cell: (row) => (
-                <div className="flex space-x-4 items-center py-2">
-                    <div className='grid'>
-                        <div className='text-[16px] text-gray-600 capitalize font-extralight'>{row?.fullname}</div>
-                        <div className='text-xs text-gray-500'>{row?.email}</div>
-                    </div>
+                <div className='grid py-2 space-y-1'>
+                    <div className='text-[16px] text-gray-600 capitalize font-extralight'>{row?.last_name} {row?.first_name}</div>
+                    <div className='text-xs text-gray-600'>{row?.email}</div>
+                    <div className='text-xs text-blue-500'>{row?.phonenumber}</div>
                 </div>
             )
         },
         {
-            name: "",
-            selector: (row) => row?.role,
+            name: "Facility",
+            selector: (row) => row?.facility,
             filterable: true,
             sortable: true,
             cell: (row) => (
-                <div className='text-[16px] text-gray-600 font-extralight'>{row?.role}</div>
+                <div className='grid py-2 space-y-1'>
+                    <div className='text-[16px] text-gray-600 capitalize font-extralight'>{row?.facility}, {row?.lga}, {row?.state}</div>
+                </div>
+            )
+        },
+        {
+            name: "Role",
+            selector: (row) => row?.usercategory,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-2 space-y-1'>
+                    <div className='text-[16px] text-gray-600 capitalize font-extralight'>{row?.usercategory}</div>
+                </div>
+            )
+        },
+        {
+            name: "Supervisor",
+            selector: (row) => row?.supervisor,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-2 space-y-1'>
+                    <div className='text-[16px] text-gray-700 capitalize font-extralight'>{row?.supervisor}</div>
+                    <div className='text-xs text-gray-600 capitalize font-extralight'>{row?.supervisor_phone}</div>
+                </div>
+            )
+        },
+        {
+            name: "Registered",
+            selector: (row) => row?.reg_date,
+            filterable: true,
+            sortable: true,
+            cell: (row) => (
+                <div className='grid py-2 space-y-1'>
+                    <div className='text-[16px] text-gray-700 capitalize font-extralight'>{formatDate(row?.reg_date)}</div>
+                </div>
             )
         },
         {
@@ -83,9 +118,9 @@ const Users = () => {
     }
 
     const userDelete = (obj) => {
-        if(window.confirm(`Are you sure you want to delete ${obj?.fullname} account?`)){
+        if(window.confirm(`Are you sure you want to delete ${obj?.last_name} ${obj?.first_name} account?`)){
             const data = { id: obj?.id }
-            deleteUser(token, data, setSuccess, setError, setDeleting);
+            //deleteUser(token, data, setSuccess, setError, setDeleting);
         }
     }
 
@@ -108,6 +143,12 @@ const Users = () => {
         <div className='w-full'>
             <div className='w-full flex justify-between items-center'>
                 <PageTitle icon={icon} />
+                <button
+                    className='flex items-center space-x-1 px-6 py-2 bg-[#005072] hover:bg-[#0b2d3b] text-white'
+                    onClick={() => setShowmodal(true)}
+                >
+                    <HiPlus size={18} /> <span>User</span>
+                </button>
             {
                 (user && user?.role === 'admin') &&
                     <button 

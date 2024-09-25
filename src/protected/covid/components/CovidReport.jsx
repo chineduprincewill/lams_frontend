@@ -9,7 +9,7 @@ import { fetchPendingCovidReport } from '../../../apis/covidActions'
 import NotificationLoader from '../../../common/NotificationLoader'
 import RecordsTable from '../../../common/RecordsTable'
 
-const CovidReport = () => {
+const CovidReport = ({ lga }) => {
 
     const { token, user, logout } = useContext(AuthContext);
 
@@ -135,8 +135,8 @@ const CovidReport = () => {
     }
 
     useEffect(() => {
-        fetchPendingCovidReport(token, endpoint, setCovid, setError, setFetching);
-    }, [endpoint])
+        fetchPendingCovidReport(token, endpoint, { lga }, setCovid, setError, setFetching);
+    }, [endpoint, lga])
 
     return (
         <div className='w-full'>
@@ -170,7 +170,8 @@ const CovidReport = () => {
             <div>
             {
                 fetching ? <NotificationLoader /> : 
-                    (covid !== null && covid?.covid.length > 0) && <RecordsTable columns={columns} data={covid?.covid} />
+                    (covid !== null && covid?.covid.length > 0) ? <RecordsTable columns={columns} data={covid?.covid} /> :
+                    <span className='text-lg font-extralight text-red-600'>No records found!</span>
             }
             </div>
         </div>

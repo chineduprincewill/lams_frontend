@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PageTitle from '../../../common/PageTitle'
 import { FaVirusCovid } from 'react-icons/fa6';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
@@ -6,16 +6,24 @@ import { PiCheckCircleFill } from 'react-icons/pi';
 import { IoAnalyticsOutline } from 'react-icons/io5';
 import { ImStatsBars } from 'react-icons/im';
 import CovidReport from '../components/CovidReport';
+import StatesComponent from '../../../common/StatesComponent';
+import LgasComponent from '../../../common/LgasComponent';
+import { AuthContext } from '../../../context/AuthContext';
 
 const Covid = () => {
+
+    const { user } = useContext(AuthContext);
 
     const [isVisible, setIsVisible] = useState(false);
     const [selected, setSelected] = useState('report');
 
+    const [state, setState] = useState();
+    const [lga, setLga] = useState();
+
     let selectedComponent;
 
     if(selected === 'report'){
-        selectedComponent = <CovidReport />
+        selectedComponent = <CovidReport lga={lga} />
     }
 
     useEffect(() => {
@@ -54,6 +62,15 @@ const Covid = () => {
                         {selected === 'stats' && <PiCheckCircleFill size={17} className='text-white' />}
                     </div>
                 </div>
+            </div>
+            <div className='w-full flex items-center space-x-6 p-4 bg-white'>
+        {
+            (user && user?.usercategory === 'Admin') &&
+                <StatesComponent setState={setState} />
+        }
+        {
+            state && <LgasComponent state={state} setLga={setLga} />
+        }
             </div>
             <div className='w-full min-h-96 bg-white my-4 shadow-xl p-4'>
             { selectedComponent }

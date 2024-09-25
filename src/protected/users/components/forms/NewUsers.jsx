@@ -1,25 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { AiOutlineCloseCircle, AiOutlineUser } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify'
 import { AuthContext } from '../../../../context/AuthContext'
 import { CgNametag } from 'react-icons/cg'
 import { CiUser } from 'react-icons/ci'
-import { HiOutlineMail } from 'react-icons/hi'
+import { HiOutlineKey, HiOutlineMail } from 'react-icons/hi'
 import { FaPhone, FaRegCircleUser } from 'react-icons/fa6'
 import { PiGenderIntersex } from 'react-icons/pi'
 import SubmittingButton from '../../../../common/SubmittingButton'
 import { createUser } from '../../../../apis/userActions'
+import StatesComponent from '../../../../common/StatesComponent'
+import LgasComponent from '../../../../common/LgasComponent'
+import RolesComponent from '../../../../common/RolesComponent'
+import FacilitiesComponent from '../../../../common/FacilitiesComponent'
 
 const NewUsers = ({ setShowmodal }) => {
 
     const { token, refreshRecord } = useContext(AuthContext);
 
-    const [fullname, setFullname] = useState();
-    const [username, setUsername] = useState();
+    const [last_name, setLast_name] = useState();
+    const [first_name, setFirst_name] = useState();
     const [email, setEmail] = useState();
-    const [mobile, setMobile] = useState();
-    const [role, setRole] = useState();
-    const [gender, setGender] = useState();
+    const [p_word, setP_word] = useState();
+    const [confirm_p_word, setConfirm_p_word] = useState();
+    const [phonenumber, setPhonenumber] = useState();
+    const [usercategory, setUsercategory] = useState();
+    const [state, setState] = useState();
+    const [lga, setLga] = useState();
+    const [facility, setFacility] = useState();
     const [creating, setCreating] = useState(false);
     const [success, setSuccess] = useState(null);
     const [error, setError] = useState(null);
@@ -34,9 +42,18 @@ const NewUsers = ({ setShowmodal }) => {
         e.preventDefault();
 
         const data = {
-            fullname, username, email, mobile, role, gender
+            last_name, first_name, p_word, email, phonenumber, usercategory, facility, lga, state
         }
-        createUser(token, data, setSuccess, setError, setCreating);
+
+        if(p_word !== confirm_p_word){
+            alert('Password mismatch!')
+        }
+        else{
+            if(window.confirm('Are you sure that all your entries are correct?')){
+                createUser(token, data, setSuccess, setError, setCreating);
+                //alert('OK')
+            }
+        }
     }
 
     if(error !== null){
@@ -56,7 +73,7 @@ const NewUsers = ({ setShowmodal }) => {
             <div className='fixed inset-0 z-50 bg-black bg-opacity-75 transition-opacity'></div>
             <div className="fixed inset-0 z-50 overflow-y-auto">
                 <div className="flex mt-16 md:mt-0 md:min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
-                    <div className={`w-full md:w-[450px] bg-white border border-gray-400 dark:text-gray-700 px-6 py-1 transition-transform ${ isVisible ? 'animate-slideIn' : '-translate-y-full'}`}>
+                    <div className={`w-full md:w-[600px] bg-white border border-gray-400 dark:text-gray-700 px-6 py-1 transition-transform ${ isVisible ? 'animate-slideIn' : '-translate-y-full'}`}>
                         <div className='flex justify-between items-center border-b border-gray-200 py-2 text-red-500'>
                             <span className='text-gray-700 uppercase font-bold text-sm'>
                                 New User
@@ -76,13 +93,13 @@ const NewUsers = ({ setShowmodal }) => {
                                         type='text' 
                                         className='w-full p-2 border border-gray-400'
                                         required
-                                        placeholder='Enter Full name'
-                                        onChange={(e) => setFullname(e.target.value)}
+                                        placeholder='Enter last name'
+                                        onChange={(e) => setLast_name(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
                                     >
-                                        <CgNametag size={25} />
+                                        <AiOutlineUser size={25} />
                                     </button>
                                 </div>
                                 <div className='w-full flex items-center'>
@@ -90,13 +107,13 @@ const NewUsers = ({ setShowmodal }) => {
                                         type='text' 
                                         className='w-full p-2 border border-gray-400'
                                         required
-                                        placeholder='Enter username'
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder='Enter first name'
+                                        onChange={(e) => setFirst_name(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
                                     >
-                                        <CiUser size={25} />
+                                        <AiOutlineUser size={25} />
                                     </button>
                                 </div>
                                 <div className='w-full flex items-center'>
@@ -115,10 +132,38 @@ const NewUsers = ({ setShowmodal }) => {
                                 </div>
                                 <div className='w-full flex items-center'>
                                     <input 
+                                        type='password' 
+                                        className='w-full p-2 border border-gray-400'
+                                        required
+                                        placeholder='Enter password'
+                                        onChange={(e) => setP_word(e.target.value)}
+                                    />
+                                    <button
+                                        className='p-2 bg-[#a6ce39] text-[#005072]'
+                                    >
+                                        <HiOutlineKey size={25} />
+                                    </button>
+                                </div>
+                                <div className='w-full flex items-center'>
+                                    <input 
+                                        type='password' 
+                                        className='w-full p-2 border border-gray-400'
+                                        required
+                                        placeholder='Confirm password'
+                                        onChange={(e) => setConfirm_p_word(e.target.value)}
+                                    />
+                                    <button
+                                        className='p-2 bg-[#a6ce39] text-[#005072]'
+                                    >
+                                        <HiOutlineKey size={25} />
+                                    </button>
+                                </div>
+                                <div className='w-full flex items-center'>
+                                    <input 
                                         type='number' 
                                         className='w-full p-2 border border-gray-400'
                                         placeholder='Enter mobile number'
-                                        onChange={(e) => setMobile(e.target.value)}
+                                        onChange={(e) => setPhonenumber(e.target.value)}
                                     />
                                     <button
                                         className='p-2 bg-[#a6ce39] text-[#005072]'
@@ -126,36 +171,13 @@ const NewUsers = ({ setShowmodal }) => {
                                         <FaPhone size={25} />
                                     </button>
                                 </div>
-                                <div className='w-full flex items-center'>
-                                    <select 
-                                        className='w-full p-2 border border-gray-400'
-                                        onChange={(e) => setGender(e.target.value)}
-                                    >
-                                        <option>select gender</option>
-                                        <option value='Male'>Male</option>
-                                        <option value='Female'>Female</option>
-                                    </select>
-                                    <button
-                                        className='p-2 bg-[#a6ce39] text-[#005072]'
-                                    >
-                                        <PiGenderIntersex size={25} />
-                                    </button>
+                                <div className='grid space-y-4'>
+                                    <RolesComponent setUsercategory={setUsercategory} yPad='py-2.5' />
+                                    <StatesComponent setState={setState} yPad='py-2.5' />
+                                    <LgasComponent state={state} setLga={setLga} yPad='py-2.5' />
+                                    <FacilitiesComponent lga={lga} setFacility={setFacility} yPad='py-2.5' />
                                 </div>
-                                <div className='w-full flex items-center'>
-                                    <select 
-                                        className='w-full p-2 border border-gray-400'
-                                        onChange={(e) => setRole(e.target.value)}
-                                    >
-                                        <option>select role</option>
-                                        <option value='admin'>admin</option>
-                                        <option value='staff'>staff</option>
-                                    </select>
-                                    <button
-                                        className='p-2 bg-[#a6ce39] text-[#005072]'
-                                    >
-                                        <FaRegCircleUser size={25} />
-                                    </button>
-                                </div>
+                                
                             {
                                 creating ?
                                     <SubmittingButton buttonText='Creating...' />

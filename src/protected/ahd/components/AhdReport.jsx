@@ -9,16 +9,22 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { PiCheckCircle } from 'react-icons/pi';
 import { MdOutlinePending } from 'react-icons/md';
 import { HiOutlineViewList } from 'react-icons/hi';
+import { approvalAction } from '../../../apis/utilityActions';
+import SuccessModal from '../../../common/SuccessModal';
 
-const AhdReport = () => {
+const AhdReport = ({ lga }) => {
 
-    const { token, user, logout } = useContext(AuthContext);
+    const { token, user, logout, record, refreshRecord } = useContext(AuthContext);
 
     const [ahd, setAhd] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState('pending');
     const [endpoint, setEndpoint] = useState('ahd-report');
+    const [success, setSuccess] = useState(null)
+    const [approving, setApproving] = useState(false);
+    const [message, setMessage] = useState();
+    //const [actionmodal, setActionmodal] = useState(false);
 
     const columns = [
         {
@@ -34,11 +40,13 @@ const AhdReport = () => {
                             size={17} 
                             className='cursor-pointer mt-1 text-green-600'
                             title='Approve' 
+                            onClick={() => reportAction(row?.form_report_id, 'Approved')}
                         />
                         <AiOutlineCloseCircle 
                             size={16} 
                             className='cursor-pointer mt-1 text-red-600' 
                             title='Reject'
+                            onClick={() => reportAction(row?.form_report_id, 'Rejected')}
                         />
                     </div>
                 </div>
@@ -126,6 +134,17 @@ const AhdReport = () => {
         logout();
     }
 
+    const reportAction = (form_report_id, action) => {
+        const data = { form_report_id, action }
+
+        action === 'Approved' ? setMessage('Approving...') : setMessage('Rejecting...');
+        let actionmessage = action === 'Approved' ? 'approve' : 'reject';
+        //setActionmodal(true);
+        if(window.confirm(`Are you sure you want to ${actionmessage} this record?`)){
+            approvalAction(token, data, setSuccess, setError, setApproving)
+        }
+    }
+
     const filterByStatus = (stat) => {
         setSelected(stat);
         stat === 'pending' && setEndpoint('ahd-report');
@@ -139,9 +158,15 @@ const AhdReport = () => {
         setError(null);
     }
 
+    if(success !== null){
+        toast.success(success?.success);
+        setSuccess(null);
+        refreshRecord(Date.now());
+    }
+
     useEffect(() => {
-        fetchAhdReport(token, endpoint, setAhd, setError, setFetching);
-    }, [endpoint])
+        fetchAhdReport(token, endpoint, lga && { lga }, setAhd, setError, setFetching);
+    }, [endpoint, lga, record])
 
     return (
         <div className='w-full'>
@@ -185,9 +210,12 @@ const AhdReport = () => {
             <div>
             {
                 fetching ? <NotificationLoader /> : 
-                    (ahd !== null && ahd?.ahd.length > 0) && <RecordsTable columns={columns} data={ahd?.ahd} />
+                    (ahd !== null && ahd?.ahd.length > 0) ? <RecordsTable columns={columns} data={ahd?.ahd} />
+                    :
+                    <span className='text-lg font-extralight text-red-600'>No records found!</span>
             }
             </div>
+            { approving && <SuccessModal message={message} />}
         </div>
     )
 }

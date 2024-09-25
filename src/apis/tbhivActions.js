@@ -1,11 +1,12 @@
 import axios from "./baseUrl";
 
-export const fetchTBHivReport = async ( token, endpoint, setSerology, setError, setFetching ) => {
+export const fetchTBHivReport = async ( token, endpoint, data, setSerology, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get(`${endpoint}`,
+        const response  = await axios.post(`${endpoint}`,
+            data,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }

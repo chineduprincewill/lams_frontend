@@ -1,11 +1,12 @@
 import axios from "./baseUrl";
 
-export const fetchPendingCovidReport = async ( token, endpoint, setCovid, setError, setFetching ) => {
+export const fetchPendingCovidReport = async ( token, endpoint, data, setCovid, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get(`${endpoint}`,
+        const response  = await axios.post(`${endpoint}`,
+            data,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }

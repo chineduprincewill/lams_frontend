@@ -7,7 +7,7 @@ import { tokenExpired } from '../../../apis/functions';
 import PieChart from '../../../common/charts/PieChart';
 import LineChart from '../../../common/charts/LineChart';
 
-const AhdAnalytics = () => {
+const AhdAnalytics = ({ lga }) => {
 
     const { token, logout } = useContext(AuthContext);
     const [results, setResults] = useState(null);
@@ -57,7 +57,7 @@ const AhdAnalytics = () => {
             setResults(results => results.filter(rst => rst?.forms_title === `AHD ${category}`))
         }
         else{   
-            fetchCd4Statistics(token, endpoint, {selectedYear}, setResults, setError, setFetching);
+            fetchCd4Statistics(token, endpoint, {selectedYear, lga }, setResults, setError, setFetching);
         }
     }, [selectedYear, category, isSelected])
 

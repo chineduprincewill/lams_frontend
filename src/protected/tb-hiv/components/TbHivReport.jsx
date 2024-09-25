@@ -9,9 +9,9 @@ import { fetchTBHivReport } from '../../../apis/tbhivActions';
 import NotificationLoader from '../../../common/NotificationLoader';
 import RecordsTable from '../../../common/RecordsTable';
 
-const TbHivReport = () => {
+const TbHivReport = ({ lga }) => {
 
-    const { token, user, logout } = useContext(AuthContext);
+    const { token, logout } = useContext(AuthContext);
 
     const [tbhiv, setTbhiv] = useState(null);
     const [fetching, setFetching] = useState(false);
@@ -134,8 +134,8 @@ const TbHivReport = () => {
     }
 
     useEffect(() => {
-        fetchTBHivReport(token, endpoint, setTbhiv, setError, setFetching);
-    }, [endpoint])
+        fetchTBHivReport(token, endpoint, {lga}, setTbhiv, setError, setFetching);
+    }, [endpoint, lga])
 
     return (
         <div className='w-full'>
@@ -169,7 +169,8 @@ const TbHivReport = () => {
             <div>
             {
                 fetching ? <NotificationLoader /> : 
-                    (tbhiv !== null && tbhiv?.tbhiv.length > 0) && <RecordsTable columns={columns} data={tbhiv?.tbhiv} />
+                    (tbhiv !== null && tbhiv?.tbhiv.length > 0) ? <RecordsTable columns={columns} data={tbhiv?.tbhiv} /> :
+                    <span className='text-lg font-extralight text-red-600'>No records found!</span>
             }
             </div>
         </div>

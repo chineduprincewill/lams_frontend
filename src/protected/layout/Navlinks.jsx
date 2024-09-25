@@ -86,11 +86,11 @@ const Navlinks = () => {
             }
             <li className='w-full pt-6'></li>
             {
-                (user) && 
-                    <li className={`${locatn.pathname === '/profile' ? 'font-semibold text-[#005072] border-b-2 border-[#54c5d0]' : 'font-light'} px-3 py-2 hover:ml-2 hover:duration-300 hover:ease-linear`}>
+                (user && user?.usercategory === 'Admin') && 
+                    <li className={`${locatn.pathname === '/users' ? 'font-semibold text-[#005072] border-b-2 border-[#54c5d0]' : 'font-light'} px-3 py-2 hover:ml-2 hover:duration-300 hover:ease-linear`}>
                         <Link to='/users' className='flex justify-start items-center space-x-3 my-1'>
                             <FaUsers size={17} />
-                            <span>User</span>
+                            <span>Users</span>
                         </Link>
                     </li>
             }

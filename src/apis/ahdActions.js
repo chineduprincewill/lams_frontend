@@ -1,11 +1,12 @@
 import axios from "./baseUrl";
 
-export const fetchAhdReport = async ( token, endpoint, setAhd, setError, setFetching ) => {
+export const fetchAhdReport = async ( token, endpoint, data, setAhd, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get(`${endpoint}`,
+        const response  = await axios.post(`${endpoint}`,
+            data,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }
@@ -53,12 +54,13 @@ export const fetchCd4Statistics = async ( token, endpoint, data, setResults, set
     setFetching(false);
 }
 
-export const fetchCd4Counts = async ( token, endpoint, setResults, setError, setFetching ) => {
+export const fetchCd4Counts = async ( token, endpoint, data, setResults, setError, setFetching ) => {
 
     setFetching(true);
 
     try{
-        const response  = await axios.get(`${endpoint}`,
+        const response  = await axios.post(`${endpoint}`,
+            data,
             {
                 headers: { 'Accept' : 'application/json', 'Authorization' : `Bearer ${token}` }
             }

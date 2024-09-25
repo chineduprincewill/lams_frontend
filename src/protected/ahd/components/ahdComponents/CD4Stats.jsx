@@ -10,7 +10,7 @@ import { ImStatsBars } from 'react-icons/im';
 import { IoAnalyticsOutline } from 'react-icons/io5';
 import CD4Charts from '../cd4Components/CD4Charts';
 
-const CD4Stats = () => {
+const CD4Stats = ({ lga }) => {
 
     const { token, user, logout } = useContext(AuthContext);
 
@@ -87,12 +87,12 @@ const CD4Stats = () => {
     }
 
     useEffect(() => {
-        fetchCd4Counts(token, endpoint, setResults, setError, setFetching);
-    }, [])
+        fetchCd4Counts(token, endpoint, { lga }, setResults, setError, setFetching);
+    }, [lga])
 
     useEffect(() => {
-        fetchFacilities(token, setFacilities, setError, setFetching);
-    }, [])
+        fetchFacilities(token, { lga }, setFacilities, setError, setFetching);
+    }, [lga])
 
     useEffect(() => {
         setCd4data(generateCD4aggregateData());
@@ -105,7 +105,7 @@ const CD4Stats = () => {
                 onClick={() => toggleShow()}
              >
                 <div className='flex items-center space-x-4'>
-                    <span>CD4 Statistics for {user && user?.lga} LGA</span>
+                    <span>CD4 Statistics for {lga ? lga : (user && user?.lga)} LGA</span>
                 {
                     section !== '' && 
                         <Fragment><PiCaretDoubleRightThin size={20} className='text-gray-400 mt-0.5' /><span>{section}</span></Fragment>

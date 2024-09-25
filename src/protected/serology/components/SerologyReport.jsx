@@ -9,9 +9,9 @@ import NotificationLoader from '../../../common/NotificationLoader'
 import RecordsTable from '../../../common/RecordsTable'
 import { fetchSerologyReport } from '../../../apis/serologyActions'
 
-const SerologyReport = () => {
+const SerologyReport = ({ lga }) => {
 
-    const { token, user, logout } = useContext(AuthContext);
+    const { token, logout } = useContext(AuthContext);
 
     const [serology, setSerology] = useState(null);
     const [fetching, setFetching] = useState(false);
@@ -124,8 +124,8 @@ const SerologyReport = () => {
     }
 
     useEffect(() => {
-        fetchSerologyReport(token, endpoint, setSerology, setError, setFetching);
-    }, [endpoint])
+        fetchSerologyReport(token, endpoint, {lga}, setSerology, setError, setFetching);
+    }, [endpoint, lga])
 
     return (
         <div className='w-full'>
@@ -159,7 +159,7 @@ const SerologyReport = () => {
             <div>
             {
                 fetching ? <NotificationLoader /> : 
-                    (serology !== null && serology?.serology.length > 0) && <RecordsTable columns={columns} data={serology?.serology} />
+                    (serology !== null && serology?.serology.length > 0) ? <RecordsTable columns={columns} data={serology?.serology} /> : <span className='text-lg font-extralight text-red-600'>No records found!</span>
              }
             </div>
         </div>

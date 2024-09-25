@@ -8,7 +8,7 @@ import BaselineStats from './ahdComponents/BaselineStats';
 import RoutineStats from './ahdComponents/RoutineStats';
 import CD4Stats from './ahdComponents/CD4Stats';
 
-const AhdStats = () => {
+const AhdStats = ({ lga }) => {
 
     const { token, logout } = useContext(AuthContext);
     const [results, setResults] = useState(null);
@@ -39,7 +39,7 @@ const AhdStats = () => {
     }
 
     useEffect(() => {
-        fetchCd4Statistics(token, endpoint, {selectedYear}, setResults, setError, setFetching);
+        fetchCd4Statistics(token, endpoint, {selectedYear, lga}, setResults, setError, setFetching);
     }, [selectedYear])
 
     return (
@@ -72,7 +72,7 @@ const AhdStats = () => {
             }
             </div>
             <div className='w-full my-6'>
-                <CD4Stats />
+                <CD4Stats lga={ lga } />
             </div>
         </div>
     )
