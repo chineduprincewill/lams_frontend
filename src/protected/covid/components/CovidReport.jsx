@@ -8,16 +8,21 @@ import { toast, ToastContainer } from 'react-toastify'
 import { fetchPendingCovidReport } from '../../../apis/covidActions'
 import NotificationLoader from '../../../common/NotificationLoader'
 import RecordsTable from '../../../common/RecordsTable'
+import { approvalAction } from '../../../apis/utilityActions'
+import SuccessModal from '../../../common/SuccessModal'
 
 const CovidReport = ({ lga }) => {
 
-    const { token, user, logout } = useContext(AuthContext);
+    const { token, user, logout, record, refreshRecord } = useContext(AuthContext);
 
     const [covid, setCovid] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState('pending');
     const [endpoint, setEndpoint] = useState('pending-covid-report');
+    const [success, setSuccess] = useState(null)
+    const [approving, setApproving] = useState(false);
+    const [message, setMessage] = useState();
 
     const columns = [
         {
@@ -106,11 +111,13 @@ const CovidReport = ({ lga }) => {
                     size={17} 
                     className='cursor-pointer mt-1 text-green-600'
                     title='Approve' 
+                    onClick={() => reportAction(row?.form_report_id, 'Approved')}
                 />
                 <AiOutlineCloseCircle 
                     size={16} 
                     className='cursor-pointer mt-1 text-red-600' 
                     title='Reject'
+                    onClick={() => reportAction(row?.form_report_id, 'Rejected')}
                 />
             </div>
             ),
@@ -119,6 +126,16 @@ const CovidReport = ({ lga }) => {
 
     if(tokenExpired(covid)){
         logout();
+    }
+
+    const reportAction = (form_report_id, action) => {
+        const data = { form_report_id, action }
+
+        action === 'Approved' ? setMessage('Approving...') : setMessage('Rejecting...');
+        let actionmessage = action === 'Approved' ? 'approve' : 'reject';
+        if(window.confirm(`Are you sure you want to ${actionmessage} this record?`)){
+            approvalAction(token, data, setSuccess, setError, setApproving)
+        }
     }
 
     const filterByStatus = (stat) => {
@@ -134,9 +151,15 @@ const CovidReport = ({ lga }) => {
         setError(null);
     }
 
+    if(success !== null){
+        toast.success(success?.success);
+        setSuccess(null);
+        refreshRecord(Date.now());
+    }
+
     useEffect(() => {
         fetchPendingCovidReport(token, endpoint, { lga }, setCovid, setError, setFetching);
-    }, [endpoint, lga])
+    }, [endpoint, lga, record])
 
     return (
         <div className='w-full'>
@@ -174,6 +197,7 @@ const CovidReport = ({ lga }) => {
                     <span className='text-lg font-extralight text-red-600'>No records found!</span>
             }
             </div>
+            { approving && <SuccessModal message={message} />}
         </div>
     )
 }
